@@ -1,0 +1,121 @@
+:root {
+    --yellow-crayola: #f2f79e;
+    --onyx: #3f4145;
+    --red-crayola: #ef3054;
+    --opal: #92b9bd;
+    --turquoise-green: #a8d4ad;
+    --text-white: #d9d9d9;
+
+    --tag-hover-size: 1.1;
+}
+
+body {
+    padding-top: 5rem;
+    background: var(--onyx);
+}
+
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+.navbar-brand {
+    text-align: center;
+}
+
+.navbar-brand small {
+    display: block;
+    font-size: 0.75rem;
+}
+
+.post {
+    position: relative;
+}
+
+.post-thumbnail {
+    display: block;
+    margin-top: 0.4em;
+    width: auto;
+    height: auto;
+    background: rgba(0, 0, 0, 0) !important;
+}
+
+@keyframes underline {
+    from { text-decoration-color: transparent; }
+    to { text-decoration-color: inherit; }
+}
+
+@keyframes no-underline {
+    from { text-decoration-color: inherit; }
+    to { text-decoration: transparent none; }
+}
+
+.post-title, .post-title:hover {
+    position: relative;
+    width: fit-content;
+    width: -moz-fit-content;
+    color: var(--yellow-crayola);
+    text-decoration: none;
+}
+
+.post-title:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background: var(--yellow-crayola);
+    visibility: hidden;
+    transition: all 0.3s ease-in-out;
+}
+
+.post-title:hover:before {
+    visibility: visible;
+    width: 100%;
+}
+
+.post-description {
+    color: var(--text-white);
+    margin-bottom: 3em;
+}
+
+.post-footer {
+    position: absolute;
+    bottom: -1em;
+}
+
+.post-footer > p {
+    display: inline-block;
+    float: right;
+    color: #767676;
+}
+
+.tags {
+    display: inline-block;
+}
+
+.tags * {
+    text-decoration: none;
+    color: whitesmoke;
+    width: auto;
+}
+
+.tags *:hover {
+    -webkit-transform: scale(var(--tag-hover-size));
+    -moz-transform: scale(var(--tag-hover-size));
+    -ms-transform: scale(var(--tag-hover-size));
+    -o-transform: scale(var(--tag-hover-size));
+    transform: scale(var(--tag-hover-size));
+    transition: all 200ms ease-in-out;
+    color: whitesmoke;
+}
