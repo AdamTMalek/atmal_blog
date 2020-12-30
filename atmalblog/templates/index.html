@@ -9,7 +9,7 @@
     <link href="{% static 'css/site.css' %}" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">ATMAL Blog{# <small>Simplifying the complex</small> #}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
@@ -37,7 +37,7 @@
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-danger" type="submit">Search</button>
+                <button class="btn search-button" type="submit">Search</button>
             </form>
         </div>
     </div>
@@ -56,15 +56,11 @@
                 <p class="post-description">{% lorem 35 w %}</p>
                 <div class="post-footer" style="display: block; width: 97%;">
                     <div class="tags">
-                        <a class="badge bg-primary" href="#">AVR</a>
-                        <a class="badge bg-primary" href="#">EAGLE</a>
-                        <a class="badge bg-primary" href="#">Kociołek</a>
-                        <a class="badge bg-primary" href="#">AVR</a>
-                        <a class="badge bg-primary" href="#">EAGLE</a>
-                        <a class="badge bg-primary" href="#">Kociołek</a>
-                        <a class="badge bg-primary" href="#">AVR</a>
-                        <a class="badge bg-primary" href="#">EAGLE</a>
-                        <a class="badge bg-primary" href="#">Kociołek</a>
+                        <a class="badge" href="#">AVR</a>
+                        <a class="badge" href="#">EAGLE</a>
+                        <a class="badge" href="#">Kociołek</a>
+                        <a class="badge" href="#">AVR</a>
+                        <a class="badge" href="#">EAGLE</a>
                     </div>
                     <p>Published on {% now "jS F Y H:i" %}</p>
                 </div>

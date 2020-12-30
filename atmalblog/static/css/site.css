@@ -1,17 +1,17 @@
 :root {
-    --yellow-crayola: #f2f79e;
-    --onyx: #3f4145;
-    --red-crayola: #ef3054;
+    --title: #efc88b;
+    --background: #181818;
+    --tag: #247ba0;
     --opal: #92b9bd;
     --turquoise-green: #a8d4ad;
     --text-white: #d9d9d9;
-
+    --search-button: #85cde0;
     --tag-hover-size: 1.1;
 }
 
 body {
     padding-top: 5rem;
-    background: var(--onyx);
+    background: var(--background);
 }
 
 .bd-placeholder-img {
@@ -28,6 +28,10 @@ body {
     }
 }
 
+.navbar {
+    background: #1b2342;
+}
+
 .navbar-brand {
     text-align: center;
 }
@@ -35,6 +39,15 @@ body {
 .navbar-brand small {
     display: block;
     font-size: 0.75rem;
+}
+
+.badge {
+    background: var(--tag);
+}
+
+.search-button {
+    color: white;
+    border-color: var(--search-button);
 }
 
 .post {
@@ -63,7 +76,7 @@ body {
     position: relative;
     width: fit-content;
     width: -moz-fit-content;
-    color: var(--yellow-crayola);
+    color: var(--title);
     text-decoration: none;
 }
 
@@ -74,7 +87,7 @@ body {
     height: 2px;
     bottom: 0;
     left: 0;
-    background: var(--yellow-crayola);
+    background: var(--title);
     visibility: hidden;
     transition: all 0.3s ease-in-out;
 }
@@ -118,4 +131,8 @@ body {
     transform: scale(var(--tag-hover-size));
     transition: all 200ms ease-in-out;
     color: whitesmoke;
+}
+
+hr {
+    color: #ef6f6c;
 }
