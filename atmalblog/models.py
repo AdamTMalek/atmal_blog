@@ -1,4 +1,5 @@
 from django.db import models
+from markdownx import models as markdownx_models
 
 
 class Language(models.Model):
@@ -55,7 +56,7 @@ class PostTranslations(models.Model):
     post = models.ForeignKey(Post, on_delete=models.PROTECT)
     title = models.CharField(max_length=50)
     short_description = models.CharField(max_length=275)
-    content = models.TextField()
+    content = markdownx_models.MarkdownxField()
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
     published_date = models.DateField(auto_now_add=True, editable=False)
 
