@@ -1,4 +1,6 @@
 {% load static %}
+{% url 'logout' as logout_url %}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +36,14 @@
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Resources</a>
                 </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form name="logout_form" action="{{ logout_url }}" method="post">
+                            {% csrf_token %}
+                            <a class="nav-link" onclick="logout_form.submit()">Logout</a>
+                        </form>
+                    </li>
+                {% endif %}
             </ul>
             <form class="d-flex">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
