@@ -13,9 +13,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+PROJECT_DIR = Path(__file__).resolve().parent
+BASE_DIR = PROJECT_DIR.parent
 
-with open('/etc/secret_key.txt') as secret_key_file:
+with open(f'{PROJECT_DIR}/secret_key.txt') as secret_key_file:
     SECRET_KEY = secret_key_file.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -51,7 +52,7 @@ ROOT_URLCONF = 'atmal_blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [BASE_DIR / 'atmalblog/templates']
         ,
         'APP_DIRS': True,
         'OPTIONS': {
