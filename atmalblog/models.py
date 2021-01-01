@@ -45,6 +45,7 @@ class Post(models.Model):
     """
     categories = models.ManyToManyField(Category)
     series = models.ForeignKey(Series, on_delete=models.PROTECT, blank=True)
+    thumbnail = models.ImageField(upload_to='thumbnails/')
 
 
 class PostTranslations(models.Model):
