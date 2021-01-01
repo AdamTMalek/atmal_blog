@@ -137,3 +137,34 @@ body {
 hr {
     color: #ef6f6c;
 }
+
+input, select {
+    background-color: #181a1b !important;
+    border-color: #3c4144 !important;
+}
+
+textarea {
+    background-color: #181a1b !important;
+    color: white !important;
+    border-color: #242729 !important;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #3c4144 !important;
+}
+
+.nav-link.active {
+    color: var(--text-white) !important;
+    border-color: #383d3f !important;
+    background-color: #242729 !important;
+}
+
+.markdownx-editor, .markdownx-preview{
+    margin-top: 0.2em;
+    width: 100%;
+}
+
+.md-editor {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+}
