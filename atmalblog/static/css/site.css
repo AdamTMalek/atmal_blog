@@ -12,6 +12,7 @@
 body {
     padding-top: 5rem;
     background: var(--background);
+    color: white;
 }
 
 .bd-placeholder-img {
