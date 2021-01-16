@@ -6,8 +6,11 @@ class Language(models.Model):
     """
     Stores languages that are used in the blog
     """
-    code = models.CharField(max_length=2)  # ISO-639-1 code
-    native_name = models.CharField(max_length=20)
+    code = models.CharField(max_length=2, primary_key=True, help_text='ISO-639-1 code')  # ISO-639-1 code
+    native_name = models.CharField(max_length=20, unique=True)
+
+    def __str__(self):
+        return self.native_name
 
 
 class Category(models.Model):
@@ -15,7 +18,10 @@ class Category(models.Model):
     Represents different post categories such as AVR, C, etc.
     These names are expected to be universal to all languages.
     """
-    name = models.CharField(max_length=15)
+    name = models.CharField(max_length=15, unique=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Series(models.Model):
@@ -23,7 +29,11 @@ class Series(models.Model):
     Represents a series of posts.
     These will be used, for instance, to group together posts that were originally split due to their length.
     """
-    pass  # This table will just hold the ID of the series.
+    pass
+
+    def __str__(self):
+        translations = "/".join([x.name for x in SeriesTranslations.objects.filter(series=self.pk)])
+        return translations
 
 
 class SeriesTranslations(models.Model):
@@ -31,7 +41,7 @@ class SeriesTranslations(models.Model):
     Holds the translated series title
     """
     series = models.ForeignKey(Series, on_delete=models.PROTECT)
-    name = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, unique=True)
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
 
     class Meta:
