@@ -1,5 +1,147 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Title</h1>
+    <form method="POST">
+        <!-- TODO: All inputs here need to be given a proper id etc. -->
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <label for=""
+                   class="input-group-text">Series</label>
+            <select class="form-select" size="3" aria-label="Series"
+                    id="seriesOptions">
+                {% for value, label in x %} <!-- TODO: Change to a proper list -->
+                    <option value="{{ value }}">
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" type="button" id="editSeries"
+                    data-bs-toggle="modal"
+                    data-bs-target="#newSeriesModal">
+                Edit
+            </button>
+            <button class="btn btn-outline-secondary" type="button" id="addNewSeries"
+                    data-bs-toggle="modal"
+                    data-bs-target="#newSeriesModal">
+                Add new
+            </button>
+        </div>
+        <div class="input-group mb-3">
+            <label for="" class="input-group-text">
+                Language
+            </label>
+            <select id="" type="text" class="form-select">
+                {% for value, label in x %} <!-- TODO: Change to a proper list -->
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="" class="input-group-text">
+                Title
+            </label>
+            <input id="" type="text" class="form-control"
+                   placeholder=""/>
+        </div>
+        <div class="input-group mb-3">
+            <label for="" class="input-group-text">
+                Short description
+            </label>
+            <textarea id="" type="text" class="form-control"
+                      placeholder="Short description"></textarea>
+        </div>
+        <div class="input-group mb-3">
+            <label for="" class="input-group-text">
+                Thumbnail
+            </label>
+            <input id="" type="file" class="form-control"
+                   placeholder="Short description"/>
+        </div>
+        <div class="input-group mb-3">
+            <!-- TODO: Post content here. This will be a markdownx field -->
+        </div>
+        <div class="input-group mb-3">
+            <label for="" class="input-group-text">
+                Categories
+            </label>
+            <select class="form-select" size="3" aria-label="Categories"
+                    id="">
+                {% for value, label in x %}  <!-- TODO: Change to a proper list -->
+                    <option value="{{ value }}">
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" type="button" id="addNewCategory"
+                    data-bs-toggle="modal"
+                    data-bs-target="#newCategoryModal"> <!-- TODO: Create a modal -->
+                Add new
+            </button>
+        </div>
+        <button type="submit" class="btn btn-primary float-end">Post</button>
+    </form>
+    <!-- TODO: Add the form media - required for the markdownx -->
+
+    <!-- Add new series modal -->
+    <div class="modal fade" id="newSeriesModal" tabindex="-1" aria-labelledby="newSeriesModalLabel">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newSeriesModalLabel">New Series</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-labelledby="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="seriesTranslationFormSet">
+                        {{ series_translation_form_set.management_form }}
+                        {% for form in series_translation_form_set %}
+                            {{ form.as_p }}
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addNewSeriesButton">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"
+            integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn"
+            crossorigin="anonymous"></script>
+    <script>
+        const csrfToken = $("[name=csrfmiddlewaretoken]").val();
+
+        function addNewSeriesButtonClickHandler() {
+            $('#addNewSeriesButton').click(function () {
+                $("#seriesTranslationFormSet").ajaxSubmit({
+                    url: "{% url 'new_series' %}",
+                    type: 'post',
+                    success: function (data, status, jqHXR) {
+                        console.log(data)
+                    },
+                    error: function (jqHXR, status, error) {
+                        console.log(jqHXR.responseJSON)
+                    }
+                })
+            })
+        }
+
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                }
+            }
+        })
+
+        $(() => {
+            addNewSeriesButtonClickHandler();
+        });
+    </script>
+{% endblock %}
