@@ -11,7 +11,7 @@
 
 body {
     padding-top: 5rem;
-    background: var(--background);
+    background: var(--background) !important;
     color: white;
 }
 
@@ -141,6 +141,7 @@ hr {
 input, select {
     background-color: #181a1b !important;
     border-color: #3c4144 !important;
+    color: white !important;
 }
 
 textarea {
@@ -153,10 +154,10 @@ textarea {
     border-bottom: 1px solid #3c4144 !important;
 }
 
-.nav-link.active {
-    color: var(--text-white) !important;
+.md-widget.nav-link.active {
+    color: #212529 !important;
     border-color: #383d3f !important;
-    background-color: #242729 !important;
+    background-color: #e9ecef !important;
 }
 
 .markdownx-editor, .markdownx-preview{
@@ -167,4 +168,8 @@ textarea {
 .md-editor {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
+}
+
+.modal-content {
+    background-color: var(--background) !important;
 }
