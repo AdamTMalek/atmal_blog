@@ -51,6 +51,27 @@ def new_series(request):
         return JsonResponse({'errors': form_set.errors}, status=400)
 
 
+@staff_member_required
+@require_http_methods(['POST'])
+def new_category(request):
+    form_set = CategoryTranslationFormSet(request.POST, initial=_get_initial_form_set_data())
+
+    if form_set.is_valid():
+        category = Category.objects.create()
+        for form in form_set:
+            form_name = form.cleaned_data['name']
+            form_lang = Language.objects.get(native_name=form.cleaned_data['language'])
+            CategoryTranslation.objects.create(category=category, name=form_name, language=form_lang)
+
+        response = {
+            'pk': category.pk,
+            'str': str(category)
+        }
+        return JsonResponse(response)
+    else:
+        return JsonResponse({'errors': form_set.errors}, status=400)
+
+
 @require_http_methods(['POST'])
 def logout_view(request):
     logout(request)
