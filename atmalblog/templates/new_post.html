@@ -7,7 +7,7 @@
                    class="input-group-text">{{ post_form.series.label }}</label>
             <select class="form-select" size="1" aria-label="Series"
                     name="{{ post_form.series.html_name }}"
-                    {% if post_form.series.required %} required {% endif %}
+                    {% if post_form.series.field.required %} required {% endif %}
                     id="{{ post_form.series.id_for_label }}">
                 {% for value, label in post_form.series.field.choices %}
                     <option value="{{ value }}">
@@ -28,7 +28,7 @@
             <select id="{{ post_form.language.id_for_label }}"
                     type="text"
                     class="form-select"
-                    {% if post_form.language.required %}required{% endif %}>
+                    {% if post_form.language.field.required %}required{% endif %}>
                 {% for value, label in post_form.language.field.choices %}
                     <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}
@@ -38,9 +38,11 @@
             <label for="{{ post_form.title.id_for_label }}" class="input-group-text">
                 {{ post_form.title.label }}
             </label>
-            <input id="{{ post_form.title.id_for_label }}" type="text" class="form-control"
-                   maxlength="{{ post_form.title.max_length }}"
-                   {% if post_form.title.required %}required{% endif %}
+            <input id="{{ post_form.title.id_for_label }}"
+                   type="text"
+                   class="form-control"
+                   maxlength="{{ post_form.title.field.max_length }}"
+                   {% if post_form.title.field.required %}required{% endif %}
                    placeholder="{{ post_form.title.label }}"/>
         </div>
         <div class="input-group mb-3">
@@ -48,8 +50,8 @@
                 {{ post_form.short_description.label }}
             </label>
             <textarea id="{{ post_form.short_description.id_for_label }}" type="text" class="form-control"
-                      maxlength="{{ post_form.short_description.max_length }}"
-                      {% if post_form.title.required %}required{% endif %}
+                      maxlength="{{ post_form.short_description.field.max_length }}"
+                      {% if post_form.title.field.required %}required{% endif %}
                       placeholder="{{ post_form.short_description.label }}"></textarea>
         </div>
         <div class="input-group mb-3">
@@ -59,8 +61,7 @@
             <input id="{{ post_form.thumbnail.id_for_label }}" type="file" class="form-control"
                    name="{{ post_form.thumbnail.html_name }}"
                    accept="image/*"
-                   {% if post_form.thumbnail.required %}required{% endif %}
-                   placeholder="Short description"/>
+                   {% if post_form.thumbnail.field.required %}required{% endif %}>
         </div>
         <div class="input-group mb-3">
             {{ post_form.content }}
@@ -71,7 +72,7 @@
             </label>
             <select class="form-select" size="3"
                     name="{{ post_form.categories.html_name }}"
-                    {% if post_form.categories.required %} required {% endif %}
+                    {% if post_form.categories.field.required %} required {% endif %}
                     multiple
                     aria-label="{{ post_form.categories.label }}"
                     id="{{ post_form.categories.id_for_label }}">
