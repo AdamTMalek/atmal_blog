@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        {% for error in post_form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
         <div class="input-group mb-3">
             <label for="{{ post_form.series.id_for_label }}"
                    class="input-group-text">{{ post_form.series.label }}</label>
-            <select class="form-select" size="1" aria-label="Series"
+            <select class="form-select {% if post_form.series.errors %}is-invalid{% endif %}"
+                    size="1"
+                    aria-label="Series"
                     name="{{ post_form.series.html_name }}"
                     {% if post_form.series.field.required %} required {% endif %}
                     id="{{ post_form.series.id_for_label }}">
@@ -14,6 +21,13 @@
                         {{ label }}
                     </option>
                 {% endfor %}
+                {% if post_form.series.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in post_form.series.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </select>
             <button class="btn btn-outline-secondary" type="button" id="addNewSeries"
                     data-bs-toggle="modal"
@@ -26,12 +40,20 @@
                 {{ post_form.language.label }}
             </label>
             <select id="{{ post_form.language.id_for_label }}"
+                    name="{{ post_form.language.html_name }}"
                     type="text"
-                    class="form-select"
+                    class="form-select {% if post_form.language.errors %}is-invalid{% endif %}"
                     {% if post_form.language.field.required %}required{% endif %}>
                 {% for value, label in post_form.language.field.choices %}
                     <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}
+                {% if post_form.language.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in post_form.language.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
             </select>
         </div>
         <div class="input-group mb-3">
@@ -39,38 +61,74 @@
                 {{ post_form.title.label }}
             </label>
             <input id="{{ post_form.title.id_for_label }}"
+                   name="{{ post_form.title.html_name }}"
                    type="text"
-                   class="form-control"
+                   class="form-control {% if post_form.title.errors %}is-invalid{% endif %}"
                    maxlength="{{ post_form.title.field.max_length }}"
                    {% if post_form.title.field.required %}required{% endif %}
                    placeholder="{{ post_form.title.label }}"/>
+            {% if post_form.title.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.title.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="input-group mb-3">
             <label for="{{ post_form.short_description.id_for_label }}" class="input-group-text">
                 {{ post_form.short_description.label }}
             </label>
-            <textarea id="{{ post_form.short_description.id_for_label }}" type="text" class="form-control"
+            <textarea id="{{ post_form.short_description.id_for_label }}"
+                      name="{{ post_form.short_description.html_name }}"
+                      type="text"
+                      class="form-control {% if post_form.short_description.errors %}is-invalid{% endif %}"
                       maxlength="{{ post_form.short_description.field.max_length }}"
                       {% if post_form.title.field.required %}required{% endif %}
                       placeholder="{{ post_form.short_description.label }}"></textarea>
+            {% if post_form.short_description.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.short_description.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="input-group mb-3">
             <label for="{{ post_form.thumbnail.id_for_label }}" class="input-group-text">
                 {{ post_form.thumbnail.label }}
             </label>
-            <input id="{{ post_form.thumbnail.id_for_label }}" type="file" class="form-control"
+            <input id="{{ post_form.thumbnail.id_for_label }}"
+                   name="{{ post_form.thumbnail.html_name }}"
+                   type="file"
+                   class="form-control {% if post_form.thumbnail.errors %}is-invalid{% endif %}"
                    name="{{ post_form.thumbnail.html_name }}"
                    accept="image/*"
                    {% if post_form.thumbnail.field.required %}required{% endif %}>
+            {% if post_form.thumbnail.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.thumbnail.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="input-group mb-3">
             {{ post_form.content }}
+            {% if post_form.content.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.content.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <div class="input-group mb-3">
             <label for="{{ post_form.categories.id_for_label }}" class="input-group-text">
                 {{ post_form.categories.label }}
             </label>
-            <select class="form-select" size="3"
+            <select class="form-select {% if post_form.categories.errors %}is-invalid{% endif %}"
+                    size="3"
                     name="{{ post_form.categories.html_name }}"
                     {% if post_form.categories.field.required %} required {% endif %}
                     multiple
@@ -87,6 +145,13 @@
                     data-bs-target="#newCategoryModal">
                 Add new
             </button>
+            {% if post_form.categories.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.categories.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         <button type="submit" class="btn btn-primary float-end">Post</button>
     </form>
