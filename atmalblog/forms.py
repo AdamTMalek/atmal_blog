@@ -4,12 +4,6 @@ from markdownx.fields import MarkdownxFormField
 from atmalblog.models import *
 
 
-class OriginalPostForm(ModelForm):
-    class Meta:
-        model = PostTranslations
-        fields = ['title', 'short_description', 'language', 'content']
-
-
 class PostForm(Form):
     categories = ModelMultipleChoiceField(queryset=Category.objects.all(),
                                           required=(not Post._meta.get_field('categories').blank))
