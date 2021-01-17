@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
     <form method="POST">
-        <!-- TODO: All inputs here need to be given a proper id etc. -->
         {% csrf_token %}
         <div class="input-group mb-3">
-            <label for=""
-                   class="input-group-text">Series</label>
-            <select class="form-select" size="3" aria-label="Series"
-                    id="seriesOptions">
-                {% for value, label in x %} <!-- TODO: Change to a proper list -->
+            <label for="{{ post_form.series.id_for_label }}"
+                   class="input-group-text">{{ post_form.series.label }}</label>
+            <select class="form-select" size="1" aria-label="Series"
+                    name="{{ post_form.series.html_name }}"
+                    {% if post_form.series.required %} required {% endif %}
+                    id="{{ post_form.series.id_for_label }}">
+                {% for value, label in post_form.series.field.choices %}
                     <option value="{{ value }}">
                         {{ label }}
                     </option>
@@ -26,46 +27,60 @@
             </button>
         </div>
         <div class="input-group mb-3">
-            <label for="" class="input-group-text">
-                Language
+            <label for="{{ post_form.language.id_for_label }}" class="input-group-text">
+                {{ post_form.language.label }}
             </label>
-            <select id="" type="text" class="form-select">
-                {% for value, label in x %} <!-- TODO: Change to a proper list -->
+            <select id="{{ post_form.language.id_for_label }}"
+                    type="text"
+                    class="form-select"
+                    {% if post_form.language.required %}required{% endif %}>
+                {% for value, label in post_form.language.field.choices %}
                     <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}
             </select>
         </div>
         <div class="input-group mb-3">
-            <label for="" class="input-group-text">
-                Title
+            <label for="{{ post_form.title.id_for_label }}" class="input-group-text">
+                {{ post_form.title.label }}
             </label>
-            <input id="" type="text" class="form-control"
-                   placeholder=""/>
+            <input id="{{ post_form.title.id_for_label }}" type="text" class="form-control"
+                   maxlength="{{ post_form.title.max_length }}"
+                   {% if post_form.title.required %}required{% endif %}
+                   placeholder="{{ post_form.title.label }}"/>
         </div>
         <div class="input-group mb-3">
-            <label for="" class="input-group-text">
-                Short description
+            <label for="{{ post_form.short_description.id_for_label }}" class="input-group-text">
+                {{ post_form.short_description.label }}
             </label>
-            <textarea id="" type="text" class="form-control"
-                      placeholder="Short description"></textarea>
+            <textarea id="{{ post_form.short_description.id_for_label }}" type="text" class="form-control"
+                      maxlength="{{ post_form.short_description.max_length }}"
+                      {% if post_form.title.required %}required{% endif %}
+                      placeholder="{{ post_form.short_description.label }}"></textarea>
         </div>
         <div class="input-group mb-3">
-            <label for="" class="input-group-text">
-                Thumbnail
+            <label for="{{ post_form.thumbnail.id_for_label }}" class="input-group-text">
+                {{ post_form.thumbnail.label }}
             </label>
-            <input id="" type="file" class="form-control"
+            <input id="{{ post_form.thumbnail.id_for_label }}" type="file" class="form-control"
+                   name="{{ post_form.thumbnail.html_name }}"
+                   accept="image/*"
+                   {% if post_form.thumbnail.required %}required{% endif %}
                    placeholder="Short description"/>
         </div>
         <div class="input-group mb-3">
-            <!-- TODO: Post content here. This will be a markdownx field -->
+            {{ post_form.content }}
         </div>
         <div class="input-group mb-3">
-            <label for="" class="input-group-text">
-                Categories
+            <label for="{{ post_form.categories.id_for_label }}" class="input-group-text">
+                {{ post_form.categories.label }}
             </label>
-            <select class="form-select" size="3" aria-label="Categories"
-                    id="">
-                {% for value, label in x %}  <!-- TODO: Change to a proper list -->
+            <select class="form-select" size="3"
+                    name="{{ post_form.categories.html_name }}"
+                    {% if post_form.categories.required %} required {% endif %}
+                    multiple
+                    aria-label="{{ post_form.categories.label }}"
+                    id="{{ post_form.categories.id_for_label }}">
+                {% for value, label in post_form.categories.field.choices %}
                     <option value="{{ value }}">
                         {{ label }}
                     </option>
@@ -79,7 +94,7 @@
         </div>
         <button type="submit" class="btn btn-primary float-end">Post</button>
     </form>
-    <!-- TODO: Add the form media - required for the markdownx -->
+    {{ post_form.media }}
 
     <!-- Add new series modal -->
     <div class="modal fade" id="newSeriesModal" tabindex="-1" aria-labelledby="newSeriesModalLabel">
