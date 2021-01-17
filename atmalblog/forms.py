@@ -11,10 +11,13 @@ class PostForm(Form):
                               empty_label="(No series)",
                               required=(not Post._meta.get_field('series').blank))
     thumbnail = ImageField(required=(not Post._meta.get_field('thumbnail').blank))
-    title = CharField(max_length=PostTranslations._meta.get_field('title').max_length)
-    short_description = CharField(max_length=PostTranslations._meta.get_field('short_description').max_length)
+    title = CharField(max_length=PostTranslations._meta.get_field('title').max_length,
+                      required=(not PostTranslations._meta.get_field('title').blank))
+    short_description = CharField(max_length=PostTranslations._meta.get_field('short_description').max_length,
+                                  required=(not PostTranslations._meta.get_field('short_description').blank))
     content = MarkdownxFormField()
-    language = ModelChoiceField(queryset=Language.objects.all(), empty_label="(Choose a language)")
+    language = ModelChoiceField(queryset=Language.objects.all(), empty_label="(Choose a language)",
+                                required=(not PostTranslations._meta.get_field('language').blank))
 
 
 class SeriesTranslationForm(Form):
