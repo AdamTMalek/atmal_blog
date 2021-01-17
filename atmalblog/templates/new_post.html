@@ -103,7 +103,22 @@
                     <form id="seriesTranslationFormSet">
                         {{ series_translation_form_set.management_form }}
                         {% for form in series_translation_form_set %}
-                            {{ form.as_p }}
+                            <div class="input-group mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="input-group-text">
+                                    {{ form.name.label }}
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="{{ form.name.html_name }}"
+                                       maxlength="{{ form.name.max_length }}"
+                                       id="{{ form.name.id_for_label }}">
+                                <input type="text"
+                                       readonly
+                                       name="{{ form.language.html_name }}"
+                                       maxlength="{{ form.language.max_length }}"
+                                       id="{{ form.language.id_for_label }}"
+                                       value="{{ form.language.value }}">
+                            </div>
                         {% endfor %}
                     </form>
                 </div>
@@ -153,7 +168,11 @@
                     url: "{% url 'new_series' %}",
                     type: 'post',
                     success: function (data, status, jqHXR) {
-                        console.log(data)
+                        let option = new Option(data.str, data.pk);
+                        $(option).html(data.str);
+                        $("#{{ post_form.series.id_for_label }}").append(option);
+                        $("#{{ post_form.series.id_for_label }}").val(option.value);
+                        $("#newSeriesModal").modal('hide');
                     },
                     error: function (jqHXR, status, error) {
                         console.log(jqHXR.responseJSON)

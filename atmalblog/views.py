@@ -42,8 +42,11 @@ def new_series(request):
             form_lang = Language.objects.get(native_name=form.cleaned_data['language'])
             SeriesTranslations.objects.create(series=series, name=form_name, language=form_lang)
 
-        serialized_series = serializers.serialize('json', [series])
-        return JsonResponse(serialized_series, status=200, safe=False)
+        response = {
+            'pk': series.pk,
+            'str': str(series)
+        }
+        return JsonResponse(response)
     else:
         return JsonResponse({'errors': form_set.errors}, status=400)
 
