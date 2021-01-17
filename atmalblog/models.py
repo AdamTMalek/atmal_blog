@@ -20,7 +20,11 @@ class Category(models.Model):
     pass
 
     def __str__(self):
-        return "/".join([x.name for x in CategoryTranslation.objects.filter(category=self.pk)])
+        translations = CategoryTranslation.objects.filter(category=self.pk)
+        if not translations:
+            return "(No translations)"
+        else:
+            return "/".join([x.name for x in translations])
 
 
 class CategoryTranslation(models.Model):
@@ -42,8 +46,11 @@ class Series(models.Model):
     pass
 
     def __str__(self):
-        translations = "/".join([x.name for x in SeriesTranslations.objects.filter(series=self.pk)])
-        return translations
+        translations = SeriesTranslations.objects.filter(series=self.pk)
+        if not translations:
+            return "(No translations)"
+        else:
+            return "/".join([x.name for x in translations])
 
 
 class SeriesTranslations(models.Model):
@@ -53,6 +60,9 @@ class SeriesTranslations(models.Model):
     series = models.ForeignKey(Series, on_delete=models.PROTECT)
     name = models.CharField(max_length=25)
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.name} ({self.language})"
 
     class Meta:
         constraints = [
