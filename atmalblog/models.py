@@ -16,12 +16,22 @@ class Language(models.Model):
 class Category(models.Model):
     """
     Represents different post categories such as AVR, C, etc.
-    These names are expected to be universal to all languages.
     """
-    name = models.CharField(max_length=15, unique=True)
+    pass
 
     def __str__(self):
-        return self.name
+        return "/".join([x.name for x in CategoryTranslation.objects.filter(category=self.pk)])
+
+
+class CategoryTranslation(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.PROTECT)
+    name = models.CharField(max_length=20, unique=True)
+    language = models.ForeignKey(Language, on_delete=models.PROTECT)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['category', 'language'], name='unique_category_translation')
+        ]
 
 
 class Series(models.Model):
