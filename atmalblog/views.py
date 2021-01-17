@@ -8,7 +8,7 @@ from django.views.decorators.http import require_http_methods
 from .forms import *
 
 
-def _get_initial_series_translation_form_set_data():
+def _get_initial_form_set_data():
     return [{'name': '', 'language': lang} for lang in Language.objects.all()]
 
 
@@ -22,7 +22,9 @@ def new_post(request):
         pass
 
     context = {
-        'series_translation_form_set': SeriesTranslationFormSet(initial=_get_initial_series_translation_form_set_data())
+        'post_form': PostForm(),
+        'series_translation_form_set': SeriesTranslationFormSet(initial=_get_initial_form_set_data()),
+        'category_translation_form_set': CategoryTranslationFormSet(initial=_get_initial_form_set_data()),
     }
 
     return render(request, 'new_post.html', context=context)
@@ -31,7 +33,7 @@ def new_post(request):
 @staff_member_required
 @require_http_methods(['POST'])
 def new_series(request):
-    form_set = SeriesTranslationFormSet(request.POST, initial=_get_initial_series_translation_form_set_data())
+    form_set = SeriesTranslationFormSet(request.POST, initial=_get_initial_form_set_data())
 
     if form_set.is_valid():
         series = Series.objects.create()
