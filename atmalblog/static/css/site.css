@@ -64,13 +64,21 @@ body {
 }
 
 @keyframes underline {
-    from { text-decoration-color: transparent; }
-    to { text-decoration-color: inherit; }
+    from {
+        text-decoration-color: transparent;
+    }
+    to {
+        text-decoration-color: inherit;
+    }
 }
 
 @keyframes no-underline {
-    from { text-decoration-color: inherit; }
-    to { text-decoration: transparent none; }
+    from {
+        text-decoration-color: inherit;
+    }
+    to {
+        text-decoration: transparent none;
+    }
 }
 
 .post-title, .post-title:hover {
@@ -160,7 +168,7 @@ textarea {
     background-color: #e9ecef !important;
 }
 
-.markdownx-editor, .markdownx-preview{
+.markdownx-editor, .markdownx-preview {
     margin-top: 0.2em;
     width: 100%;
 }
@@ -168,8 +176,19 @@ textarea {
 .md-editor {
     margin-top: 0.4em;
     margin-bottom: 0.4em;
+    width: 100%;
 }
 
 .modal-content {
     background-color: var(--background) !important;
+}
+
+#nav-editor {
+    border: 0 solid #000000 !important;
+    display: inline-block !important;
+    width: 100%;
+}
+
+#nav-editor > textarea {
+    width: 100% !important;
 }

@@ -11,10 +11,7 @@
     </nav>
     <div class="tab-content markdownx" id="post-content-editor-tab-content">
         <div class=" tab-pane fade show active" id="nav-editor" role="tabpanel" aria-labelledby="nav-editor">
-        <textarea name="content" cols="200" required id="id_content" class="markdownx-editor form-control"
-                  data-markdownx-editor-resizable data-markdownx-urls-path="/markdownx/markdownify/"
-                  data-markdownx-upload-urls-path="/markdownx/upload/" data-markdownx-latency="500"
-                  rows="15"></textarea>
+            {% include 'django/forms/widgets/textarea.html' %}
         </div>
         <div class="tab-pane fade" id="nav-preview" role="tabpanel" aria-labelledby="nav-preview">
             <div class="markdownx-preview"></div>
