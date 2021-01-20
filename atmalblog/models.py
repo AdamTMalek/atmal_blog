@@ -75,7 +75,7 @@ class Post(models.Model):
     Represents a single post which can have multiple categories and belong to a series.
     """
     categories = models.ManyToManyField(Category)
-    series = models.ForeignKey(Series, on_delete=models.PROTECT, null=True)
+    series = models.ForeignKey(Series, on_delete=models.PROTECT, null=True, blank=True)
     thumbnail = models.ImageField(upload_to='thumbnails/')
 
 
