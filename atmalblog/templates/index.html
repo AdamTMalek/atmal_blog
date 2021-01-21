@@ -1,28 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for i in '01234'|make_list %}
-    <div class="post row mb-2">
-        <div class="col-md-2">
-            <img class="img-thumbnail post-thumbnail"
-                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/TO-92%2C_BC548_%28front%2C_shaded%29.svg/1200px-TO-92%2C_BC548_%28front%2C_shaded%29.svg.png"/>
-        </div>
-        <div class="col" style="position: relative">
-            <a class="h2 post-title" href="#">Hello world</a>
+    {% for post in posts %}
+        <div class="post row mb-2">
+            <div class="col-md-2">
+                <img class="img-thumbnail post-thumbnail"
+                     src="{{ post.post.thumbnail }}"/>
+            </div>
+            <div class="col" style="position: relative">
+                <a class="h2 post-title" href="#">{{ post.title }}</a>
 
-            <p class="post-description">{% lorem 35 w %}</p>
-            <div class="post-footer" style="display: block; width: 97%;">
-                <div class="tags">
-                    <a class="badge" href="#">AVR</a>
-                    <a class="badge" href="#">EAGLE</a>
-                    <a class="badge" href="#">Kociołek</a>
-                    <a class="badge" href="#">AVR</a>
-                    <a class="badge" href="#">EAGLE</a>
+                <p class="post-description">{{ post.short_description }}</p>
+                <div class="post-footer" style="display: block; width: 97%;">
+                    <div class="tags">
+                        {% for category in post.post.categories.all %}
+                            <a class="badge" href="#">{{ category }}</a>
+                        {% endfor %}
+                    </div>
+                    <p>Published on {{ post.published_date }}</p>
                 </div>
-                <p>Published on {% now "jS F Y H:i" %}</p>
             </div>
         </div>
-    </div>
-    <hr>
-{% endfor %}
+        <hr>
+    {% endfor %}
 {% endblock %}
