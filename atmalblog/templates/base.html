@@ -1,4 +1,5 @@
 {% load static %}
+{% load tags %}
 {% url 'index' as index %}
 {% url 'new_post' as new_post_url %}
 {% url 'logout' as logout_url %}
@@ -24,7 +25,7 @@
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item active">
+                <li class="nav-item {% active request index %}">
                     <a class="nav-link" aria-current="page" href="{{ index }}">Home</a>
                 </li>
                 <li class="nav-item dropdown">
@@ -40,7 +41,7 @@
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Resources</a>
                 </li>
                 {% if user.is_staff %}
-                    <li class="nav-item">
+                    <li class="nav-item {% active request new_post_url %}">
                         <a class="nav-link" href="{{ new_post_url }}">New post</a>
                     </li>
                 {% endif %}
