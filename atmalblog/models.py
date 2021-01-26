@@ -1,5 +1,7 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 from markdownx import models as markdownx_models
+from markdownx.utils import markdownify
 
 
 class Language(models.Model):
@@ -89,6 +91,14 @@ class PostTranslations(models.Model):
     content = markdownx_models.MarkdownxField()
     language = models.ForeignKey(Language, on_delete=models.PROTECT)
     published_date = models.DateField(auto_now_add=True, editable=False)
+
+    @property
+    def markdownified_content(self):
+        return markdownify(self.content)
+
+    @property
+    def slug(self):
+        return slugify(self.title)
 
     class Meta:
         constraints = [
