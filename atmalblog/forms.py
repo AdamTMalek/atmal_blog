@@ -20,6 +20,16 @@ class PostForm(Form):
                                 required=(not PostTranslations._meta.get_field('language').null))
 
 
+class PostTranslationForm(Form):
+    title = CharField(max_length=PostTranslations._meta.get_field('title').max_length,
+                      required=(not PostTranslations._meta.get_field('title').null))
+    short_description = CharField(max_length=PostTranslations._meta.get_field('short_description').max_length,
+                                  required=(not PostTranslations._meta.get_field('short_description').null))
+    content = MarkdownxFormField()
+    language = ModelChoiceField(queryset=Language.objects.all(), empty_label="(Choose a language)",
+                                required=(not PostTranslations._meta.get_field('language').null))
+
+
 class SeriesTranslationForm(Form):
     name = CharField(max_length=SeriesTranslations._meta.get_field('name').max_length)
     language = CharField(max_length=SeriesTranslations._meta.get_field('language').max_length)

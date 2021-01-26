@@ -344,14 +344,5 @@
             addNewSeriesButtonClickHandler();
             addNewCategoryButtonClickHandler();
         });
-
-        jQuery.fn.any = function (filter) {
-            for (let i = 0; i < this.length; i++) {
-                console.log(this[i]);
-                if (filter.call(this[i]))
-                    return true;
-            }
-            return false;
-        };
     </script>
 {% endblock %}

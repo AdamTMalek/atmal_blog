@@ -80,6 +80,13 @@ class Post(models.Model):
     series = models.ForeignKey(Series, on_delete=models.PROTECT, null=True, blank=True)
     thumbnail = models.ImageField(upload_to='thumbnails/')
 
+    def __str__(self):
+        translations = PostTranslations.objects.filter(post=self.pk)
+        if len(translations) > 0:
+            return "/".join(x.title for x in translations)
+        else:
+            return "(No translations)"
+
 
 class PostTranslations(models.Model):
     """

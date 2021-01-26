@@ -41,9 +41,15 @@
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Resources</a>
                 </li>
                 {% if user.is_staff %}
-                    <li class="nav-item {% active request new_post_url %}">
-                        <a class="nav-link" href="{{ new_post_url }}">New post</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="new-dropdown" data-bs-toggle="dropdown"
+                           aria-expanded="false">New</a>
+                        <ul class="dropdown-menu" aria-labelledby="new-dropdown">
+                            <li><a class="dropdown-item" href="{{ new_post_url }}">New post</a></li>
+                            <li><a class="dropdown-item" href="{% url 'new_translation' %}">New translation</a></li>
+                        </ul>
                     </li>
+
                 {% endif %}
                 {% if user.is_authenticated %}
                     <li class="nav-item">
