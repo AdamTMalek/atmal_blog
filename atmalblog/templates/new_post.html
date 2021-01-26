@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" id="new-post-form">
         {% csrf_token %}
         {% for error in post_form.non_field_errors %}
             <div class="alert alert-danger" role="alert">
@@ -242,6 +242,8 @@
             crossorigin="anonymous"></script>
     <script>
         const csrfToken = $("[name=csrfmiddlewaretoken]").val();
+        let formSubmitted = false;
+        const files = [];
 
         function addNewSeriesButtonClickHandler() {
             $('#addNewSeriesButton').click(function () {
@@ -293,9 +295,63 @@
             }
         })
 
+        $('.markdownx')[0].addEventListener('markdownx.fileUploadEnd', addToUploadedFiles);
+
+        function addToUploadedFiles(event) {
+            // The image code is markdownified code that appears in the editor.
+            // We use regex to find the file path in between ( and ).
+            // Then, the path is added to the files array.
+            let regex = /\(([\w\/\-.]+)\)/
+            let code = event.detail[0].image_code;
+            let file = regex.exec(code)[1];
+            files.push(file);
+        }
+
+        /**
+         * Checks if there's any content in the form.
+         * @returns {boolean} True if any of there's any text in any of the form's inputs.
+         */
+        function isFormChanged() {
+            return !!$('#new-post-form input:not([type=hidden]), #new-post-form textarea').toArray().some(function (el) {
+               return $(el).val().length > 0;
+            });
+        }
+
+        $(document).submit(function () {
+            formSubmitted = true;
+        });
+
+        $(window).bind("beforeunload", function (event) {
+            if (isFormChanged() && !formSubmitted) {
+                event.preventDefault();
+                return true;
+            } else {
+                return undefined;
+            }
+        });
+
+        $(window).bind("pagehide", function () {
+            // Only send the cleanup beacon if there were any files uploaded via markdownx
+            if (files.length > 0) {
+                let data = new FormData();
+                data.append('csrfmiddlewaretoken', csrfToken);  // Required for CSRF protection
+                data.append('files', JSON.stringify(files));  // JSON list
+                navigator.sendBeacon("{% url 'cleanup' %}", data);
+            }
+        })
+
         $(() => {
             addNewSeriesButtonClickHandler();
             addNewCategoryButtonClickHandler();
         });
+
+        jQuery.fn.any = function (filter) {
+            for (let i = 0; i < this.length; i++) {
+                console.log(this[i]);
+                if (filter.call(this[i]))
+                    return true;
+            }
+            return false;
+        };
     </script>
 {% endblock %}

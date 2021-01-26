@@ -1,9 +1,13 @@
+import json
+import os
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import logout
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 
+from atmal_blog.settings import MEDIA_ROOT
 from .forms import *
 
 
@@ -54,6 +58,26 @@ def new_post(request):
     }
 
     return render(request, 'new_post.html', context=context)
+
+
+@staff_member_required
+@require_http_methods(['POST'])
+def new_post_cleanup(request):
+    """
+    This view function will be called by navigator.sendBeacon when user
+    leaves the /new-post page but is not submitting the form, and has
+    uploaded files via markdownx (markdown editor) that are unused.
+
+    Therefore, to prevent these files from piling up, this view will be
+    used to delete them.
+    :param request: POST form request with a list of files to delete
+    :return: HTTP Response 200
+    """
+    files = json.loads(request.POST['files'])
+    for file in files:
+        file_path = os.path.join(MEDIA_ROOT, file.lstrip('/'))
+        os.remove(file_path)
+    return HttpResponse()
 
 
 @staff_member_required

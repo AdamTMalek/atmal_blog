@@ -9,6 +9,7 @@ urlpatterns = [
     path('new-post', views.new_post, name='new_post'),
     path('new-post/new-series', views.new_series, name='new_series'),
     path('new-post/new-category', views.new_category, name='new_category'),
+    path('new-post/cleanup', views.new_post_cleanup, name='cleanup'),
     path('logout', views.logout_view, name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
