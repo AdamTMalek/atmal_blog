@@ -17,7 +17,7 @@
                             <a class="badge" href="#">{{ category }}</a>
                         {% endfor %}
                     </div>
-                    <p>Published on {{ post.published_date }}</p>
+                    <p>Published on {{ post.published_date|date:"d E Y" }}</p>
                 </div>
             </div>
         </div>
