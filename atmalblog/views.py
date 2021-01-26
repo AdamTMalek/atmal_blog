@@ -122,6 +122,16 @@ def new_category(request):
         return JsonResponse({'errors': form_set.errors}, status=400)
 
 
+def view_post(request, pk, slug):
+    post = PostTranslations.objects.get(pk=pk)
+    series = SeriesTranslations.objects.get(series=post.post.series, language=post.language)
+    context = {
+        'post': post,
+        'series': series,
+    }
+    return render(request, 'post.html', context)
+
+
 @require_http_methods(['POST'])
 def logout_view(request):
     logout(request)
