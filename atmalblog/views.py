@@ -68,12 +68,33 @@ def new_translation_post_select(request):
     return render(request, 'new_translation_post_select.html', context)
 
 
+@staff_member_required
 def new_translation(request, pk):
+    if request.method == 'POST':
+        post_form = PostTranslationForm(request.POST, request.FILES)
+        if post_form.is_valid():
+            title = post_form.cleaned_data['title']
+            short_desc = post_form.cleaned_data['short_description']
+            content = post_form.cleaned_data['content']
+
+            language = Language.objects.get(native_name=post_form.cleaned_data['language'])
+            post = Post.objects.get(pk=pk)
+
+            PostTranslations.objects.create(post=post,
+                                            title=title,
+                                            short_description=short_desc,
+                                            content=content,
+                                            language=language)
+
+            return redirect('index')
+    else:
+        post_form = PostTranslationForm()
+
     context = {
-        'post_form': PostTranslationForm(),
+        'post_form': post_form,
     }
 
-    raise NotImplementedError()
+    return render(request, 'new_translation.html', context=context)
 
 
 @staff_member_required
