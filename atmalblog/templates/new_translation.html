@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="POST" enctype="multipart/form-data" id="post-form">
+        {% csrf_token %}
+        {% for error in post_form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
+        <div class="input-group mb-3">
+            <label for="{{ post_form.language.id_for_label }}" class="input-group-text">
+                {{ post_form.language.label }}
+            </label>
+            <select id="{{ post_form.language.id_for_label }}"
+                    name="{{ post_form.language.html_name }}"
+                    type="text"
+                    class="form-select {% if post_form.language.errors %}is-invalid{% endif %}"
+                    {% if post_form.language.field.required %}required{% endif %}>
+                {% for value, label in post_form.language.field.choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+                {% if post_form.language.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in post_form.language.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="{{ post_form.title.id_for_label }}" class="input-group-text">
+                {{ post_form.title.label }}
+            </label>
+            <input id="{{ post_form.title.id_for_label }}"
+                   name="{{ post_form.title.html_name }}"
+                   type="text"
+                   class="form-control {% if post_form.title.errors %}is-invalid{% endif %}"
+                   maxlength="{{ post_form.title.field.max_length }}"
+                   {% if post_form.title.field.required %}required{% endif %}
+                   placeholder="{{ post_form.title.label }}"/>
+            {% if post_form.title.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.title.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="input-group mb-3">
+            <label for="{{ post_form.short_description.id_for_label }}" class="input-group-text">
+                {{ post_form.short_description.label }}
+            </label>
+            <textarea id="{{ post_form.short_description.id_for_label }}"
+                      name="{{ post_form.short_description.html_name }}"
+                      type="text"
+                      class="form-control {% if post_form.short_description.errors %}is-invalid{% endif %}"
+                      maxlength="{{ post_form.short_description.field.max_length }}"
+                      {% if post_form.title.field.required %}required{% endif %}
+                      placeholder="{{ post_form.short_description.label }}"></textarea>
+            {% if post_form.short_description.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.short_description.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="input-group mb-3">
+            {{ post_form.content }}
+            {% if post_form.content.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.content.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary float-end">Post</button>
+    </form>
+    {{ post_form.media }}
+{% endblock %}
+{% block script %}
+    <script>
+        {# TODO: Extract to a separate script, duplicate in new_post.html #}
+        const csrfToken = $("[name=csrfmiddlewaretoken]").val();
+        let formSubmitted = false;
+        const files = [];
+
+        $('.markdownx')[0].addEventListener('markdownx.fileUploadEnd', addToUploadedFiles);
+
+        function addToUploadedFiles(event) {
+            // The image code is markdownified code that appears in the editor.
+            // We use regex to find the file path in between ( and ).
+            // Then, the path is added to the files array.
+            let regex = /\(([\w\/\-.]+)\)/
+            let code = event.detail[0].image_code;
+            let file = regex.exec(code)[1];
+            files.push(file);
+        }
+
+        /**
+         * Checks if there's any content in the form.
+         * @returns {boolean} True if any of there's any text in any of the form's inputs.
+         */
+        function isFormChanged() {
+            return !!$('#post-form input:not([type=hidden]), #post-form textarea').toArray().some(function (el) {
+                return $(el).val().length > 0;
+            });
+        }
+
+        $(document).submit(function () {
+            formSubmitted = true;
+        });
+
+        $(window).bind("beforeunload", function (event) {
+            if (isFormChanged() && !formSubmitted) {
+                event.preventDefault();
+                return true;
+            } else {
+                return undefined;
+            }
+        });
+
+        $(window).bind("pagehide", function () {
+            // Only send the cleanup beacon if there were any files uploaded via markdownx
+            if (!formSubmitted && files.length > 0) {
+                let data = new FormData();
+                data.append('csrfmiddlewaretoken', csrfToken);  // Required for CSRF protection
+                data.append('files', JSON.stringify(files));  // JSON list
+                navigator.sendBeacon("{% url 'cleanup' %}", data);
+            }
+        })
+    </script>
+{% endblock %}
