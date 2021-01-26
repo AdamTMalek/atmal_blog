@@ -42,6 +42,10 @@ body {
     font-size: 0.75rem;
 }
 
+.nav-item.active > a {
+    color: white !important;
+}
+
 .badge {
     background: var(--tag);
 }
