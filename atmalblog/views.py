@@ -17,9 +17,9 @@ def _get_initial_form_set_data():
 
 def index(request):
     context = {
-        'posts': PostTranslations.objects.all()
+        'posts': PostTranslations.objects.order_by('-published_date'),
     }
-    return render(request, 'index.html', context=context)
+    return render(request, 'posts-list.html', context=context)
 
 
 @staff_member_required
