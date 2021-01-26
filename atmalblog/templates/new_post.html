@@ -332,7 +332,7 @@
 
         $(window).bind("pagehide", function () {
             // Only send the cleanup beacon if there were any files uploaded via markdownx
-            if (files.length > 0) {
+            if (!formSubmitted && files.length > 0) {
                 let data = new FormData();
                 data.append('csrfmiddlewaretoken', csrfToken);  // Required for CSRF protection
                 data.append('files', JSON.stringify(files));  // JSON list
