@@ -8,7 +8,7 @@
                      src="{{ post.post.thumbnail }}"/>
             </div>
             <div class="col" style="position: relative">
-                <a class="h2 post-title" href="#">{{ post.title }}</a>
+                <a class="h2 post-title" href="{% url 'view_post' pk=post.pk slug=post.slug %}">{{ post.title }}</a>
 
                 <p class="post-description">{{ post.short_description }}</p>
                 <div class="post-footer" style="display: block; width: 97%;">
