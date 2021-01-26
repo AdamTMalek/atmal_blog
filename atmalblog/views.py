@@ -61,6 +61,22 @@ def new_post(request):
 
 
 @staff_member_required
+def new_translation_post_select(request):
+    context = {
+        'posts': Post.objects.all()
+    }
+    return render(request, 'new_translation_post_select.html', context)
+
+
+def new_translation(request, pk):
+    context = {
+        'post_form': PostTranslationForm(),
+    }
+
+    raise NotImplementedError()
+
+
+@staff_member_required
 @require_http_methods(['POST'])
 def new_post_cleanup(request):
     """

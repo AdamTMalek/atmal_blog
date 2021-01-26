@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Select a post:</h2>
+    <div class="input-group mb-3">
+        <label for="post-select" class="input-group-text">Post:</label>
+        <select id="post-select" class="form-select">
+            <option value="-1">(select)</option>
+            {% for post in posts %}
+                <option value="{{ post.pk }}">{{ post }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-primary float-end disabled" id="btn-next">Next</button>
+{% endblock %}
+{% block script %}
+    <script>
+        $(() => {
+            function getSelectedValue() {
+                return $('#post-select option:selected').val();
+            }
+
+            $('#post-select').on('change', function () {
+                if (getSelectedValue() !== '-1') {
+                    $("#btn-next").removeClass('disabled');
+                } else {
+                    $("#btn-next").addClass('disabled');
+                }
+            });
+
+            $("#btn-next").on("click", function () {
+                window.location.href = `{% url 'new_translation' %}${getSelectedValue()}`;
+            });
+        })
+    </script>
+{% endblock %}
