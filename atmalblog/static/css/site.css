@@ -11,7 +11,8 @@
 
 body {
     padding-top: 5rem;
-    background: var(--background);
+    background: var(--background) !important;
+    color: white;
 }
 
 .bd-placeholder-img {
@@ -63,13 +64,21 @@ body {
 }
 
 @keyframes underline {
-    from { text-decoration-color: transparent; }
-    to { text-decoration-color: inherit; }
+    from {
+        text-decoration-color: transparent;
+    }
+    to {
+        text-decoration-color: inherit;
+    }
 }
 
 @keyframes no-underline {
-    from { text-decoration-color: inherit; }
-    to { text-decoration: transparent none; }
+    from {
+        text-decoration-color: inherit;
+    }
+    to {
+        text-decoration: transparent none;
+    }
 }
 
 .post-title, .post-title:hover {
@@ -135,4 +144,51 @@ body {
 
 hr {
     color: #ef6f6c;
+}
+
+input, select {
+    background-color: #181a1b !important;
+    border-color: #3c4144 !important;
+    color: white !important;
+}
+
+textarea {
+    background-color: #181a1b !important;
+    color: white !important;
+    border-color: #242729 !important;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #3c4144 !important;
+}
+
+.md-widget.nav-link.active {
+    color: #212529 !important;
+    border-color: #383d3f !important;
+    background-color: #e9ecef !important;
+}
+
+.markdownx-editor, .markdownx-preview {
+    margin-top: 0.2em;
+    width: 100%;
+}
+
+.md-editor {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+    width: 100%;
+}
+
+.modal-content {
+    background-color: var(--background) !important;
+}
+
+#nav-editor {
+    border: 0 solid #000000 !important;
+    display: inline-block !important;
+    width: 100%;
+}
+
+#nav-editor > textarea {
+    width: 100% !important;
 }

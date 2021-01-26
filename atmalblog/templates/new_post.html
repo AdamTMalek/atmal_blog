@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="POST" enctype="multipart/form-data" id="new-post-form">
+        {% csrf_token %}
+        {% for error in post_form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
+        <div class="input-group mb-3">
+            <label for="{{ post_form.series.id_for_label }}"
+                   class="input-group-text">{{ post_form.series.label }}</label>
+            <select class="form-select {% if post_form.series.errors %}is-invalid{% endif %}"
+                    size="1"
+                    aria-label="Series"
+                    name="{{ post_form.series.html_name }}"
+                    {% if post_form.series.field.required %} required {% endif %}
+                    id="{{ post_form.series.id_for_label }}">
+                {% for value, label in post_form.series.field.choices %}
+                    <option value="{{ value }}">
+                        {{ label }}
+                    </option>
+                {% endfor %}
+                {% if post_form.series.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in post_form.series.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </select>
+            <button class="btn btn-outline-secondary" type="button" id="addNewSeries"
+                    data-bs-toggle="modal"
+                    data-bs-target="#newSeriesModal">
+                Add new
+            </button>
+        </div>
+        <div class="input-group mb-3">
+            <label for="{{ post_form.language.id_for_label }}" class="input-group-text">
+                {{ post_form.language.label }}
+            </label>
+            <select id="{{ post_form.language.id_for_label }}"
+                    name="{{ post_form.language.html_name }}"
+                    type="text"
+                    class="form-select {% if post_form.language.errors %}is-invalid{% endif %}"
+                    {% if post_form.language.field.required %}required{% endif %}>
+                {% for value, label in post_form.language.field.choices %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+                {% if post_form.language.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in post_form.language.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <label for="{{ post_form.title.id_for_label }}" class="input-group-text">
+                {{ post_form.title.label }}
+            </label>
+            <input id="{{ post_form.title.id_for_label }}"
+                   name="{{ post_form.title.html_name }}"
+                   type="text"
+                   class="form-control {% if post_form.title.errors %}is-invalid{% endif %}"
+                   maxlength="{{ post_form.title.field.max_length }}"
+                   {% if post_form.title.field.required %}required{% endif %}
+                   placeholder="{{ post_form.title.label }}"/>
+            {% if post_form.title.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.title.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="input-group mb-3">
+            <label for="{{ post_form.short_description.id_for_label }}" class="input-group-text">
+                {{ post_form.short_description.label }}
+            </label>
+            <textarea id="{{ post_form.short_description.id_for_label }}"
+                      name="{{ post_form.short_description.html_name }}"
+                      type="text"
+                      class="form-control {% if post_form.short_description.errors %}is-invalid{% endif %}"
+                      maxlength="{{ post_form.short_description.field.max_length }}"
+                      {% if post_form.title.field.required %}required{% endif %}
+                      placeholder="{{ post_form.short_description.label }}"></textarea>
+            {% if post_form.short_description.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.short_description.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="input-group mb-3">
+            <label for="{{ post_form.thumbnail.id_for_label }}" class="input-group-text">
+                {{ post_form.thumbnail.label }}
+            </label>
+            <input id="{{ post_form.thumbnail.id_for_label }}"
+                   name="{{ post_form.thumbnail.html_name }}"
+                   type="file"
+                   class="form-control {% if post_form.thumbnail.errors %}is-invalid{% endif %}"
+                   name="{{ post_form.thumbnail.html_name }}"
+                   accept="image/*"
+                   {% if post_form.thumbnail.field.required %}required{% endif %}>
+            {% if post_form.thumbnail.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.thumbnail.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="input-group mb-3">
+            {{ post_form.content }}
+            {% if post_form.content.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.content.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="input-group mb-3">
+            <label for="{{ post_form.categories.id_for_label }}" class="input-group-text">
+                {{ post_form.categories.label }}
+            </label>
+            <select class="form-select {% if post_form.categories.errors %}is-invalid{% endif %}"
+                    size="3"
+                    name="{{ post_form.categories.html_name }}"
+                    {% if post_form.categories.field.required %} required {% endif %}
+                    multiple
+                    aria-label="{{ post_form.categories.label }}"
+                    id="{{ post_form.categories.id_for_label }}">
+                {% for value, label in post_form.categories.field.choices %}
+                    <option value="{{ value }}">
+                        {{ label }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn btn-outline-secondary" type="button" id="addNewCategory"
+                    data-bs-toggle="modal"
+                    data-bs-target="#newCategoryModal">
+                Add new
+            </button>
+            {% if post_form.categories.errors %}
+                <div class="invalid-feedback">
+                    {% for error in post_form.categories.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary float-end">Post</button>
+    </form>
+    {{ post_form.media }}
+
+    <!-- Add new series modal -->
+    <div class="modal fade" id="newSeriesModal" tabindex="-1" aria-labelledby="newSeriesModalLabel">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newSeriesModalLabel">New Series</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-labelledby="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="seriesTranslationFormSet">
+                        {{ series_translation_form_set.management_form }}
+                        {% for form in series_translation_form_set %}
+                            <div class="input-group mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="input-group-text">
+                                    {{ form.name.label }}
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="{{ form.name.html_name }}"
+                                       maxlength="{{ form.name.max_length }}"
+                                       id="{{ form.name.id_for_label }}">
+                                <input type="text"
+                                       readonly
+                                       name="{{ form.language.html_name }}"
+                                       maxlength="{{ form.language.max_length }}"
+                                       id="{{ form.language.id_for_label }}"
+                                       value="{{ form.language.value }}">
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addNewSeriesButton">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add new category modal -->
+    <div class="modal fade" id="newCategoryModal" tabindex="-1" aria-labelledby="newCategoryModalLabel">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCategoryModalLabel">New Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-labelledby="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryTranslationFormSet">
+                        {{ category_translation_form_set.management_form }}
+                        {% for form in category_translation_form_set %}
+                            <div class="input-group mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="input-group-text">
+                                    {{ form.name.label }}
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       name="{{ form.name.html_name }}"
+                                       maxlength="{{ form.name.max_length }}"
+                                       id="{{ form.name.id_for_label }}">
+                                <input type="text"
+                                       readonly
+                                       name="{{ form.language.html_name }}"
+                                       maxlength="{{ form.language.max_length }}"
+                                       id="{{ form.language.id_for_label }}"
+                                       value="{{ form.language.value }}">
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addNewCategoryButton">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"
+            integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn"
+            crossorigin="anonymous"></script>
+    <script>
+        const csrfToken = $("[name=csrfmiddlewaretoken]").val();
+        let formSubmitted = false;
+        const files = [];
+
+        function addNewSeriesButtonClickHandler() {
+            $('#addNewSeriesButton').click(function () {
+                $("#seriesTranslationFormSet").ajaxSubmit({
+                    url: "{% url 'new_series' %}",
+                    type: 'post',
+                    success: function (data, status, jqHXR) {
+                        let option = new Option(data.str, data.pk);
+                        $(option).html(data.str);
+                        $("#{{ post_form.series.id_for_label }}").append(option);
+                        $("#{{ post_form.series.id_for_label }}").val(option.value);
+                        $("#newSeriesModal").modal('hide');
+                    },
+                    error: function (jqHXR, status, error) {
+                        console.log(jqHXR.responseJSON);
+                    },
+                })
+            })
+        }
+
+        function addNewCategoryButtonClickHandler() {
+            $('#addNewCategoryButton').click(function () {
+                $('#categoryTranslationFormSet').ajaxSubmit({
+                    url: "{% url 'new_category' %}",
+                    type: 'post',
+                    success: function (data, status, jqHXR) {
+                        let option = new Option(data.str, data.pk);
+                        $(option).html(data.str);
+                        $("#{{ post_form.categories.id_for_label }}").append(option);
+                        $("#{{ post_form.categories.id_for_label }}").val(option.value);
+                        $("#newCategoryModal").modal('hide');
+                    },
+                    error: function (jqHXR, status, error) {
+                        console.log(jqHXR.responseJSON);
+                    },
+                });
+            })
+        }
+
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                }
+            }
+        })
+
+        $('.markdownx')[0].addEventListener('markdownx.fileUploadEnd', addToUploadedFiles);
+
+        function addToUploadedFiles(event) {
+            // The image code is markdownified code that appears in the editor.
+            // We use regex to find the file path in between ( and ).
+            // Then, the path is added to the files array.
+            let regex = /\(([\w\/\-.]+)\)/
+            let code = event.detail[0].image_code;
+            let file = regex.exec(code)[1];
+            files.push(file);
+        }
+
+        /**
+         * Checks if there's any content in the form.
+         * @returns {boolean} True if any of there's any text in any of the form's inputs.
+         */
+        function isFormChanged() {
+            return !!$('#new-post-form input:not([type=hidden]), #new-post-form textarea').toArray().some(function (el) {
+               return $(el).val().length > 0;
+            });
+        }
+
+        $(document).submit(function () {
+            formSubmitted = true;
+        });
+
+        $(window).bind("beforeunload", function (event) {
+            if (isFormChanged() && !formSubmitted) {
+                event.preventDefault();
+                return true;
+            } else {
+                return undefined;
+            }
+        });
+
+        $(window).bind("pagehide", function () {
+            // Only send the cleanup beacon if there were any files uploaded via markdownx
+            if (files.length > 0) {
+                let data = new FormData();
+                data.append('csrfmiddlewaretoken', csrfToken);  // Required for CSRF protection
+                data.append('files', JSON.stringify(files));  // JSON list
+                navigator.sendBeacon("{% url 'cleanup' %}", data);
+            }
+        })
+
+        $(() => {
+            addNewSeriesButtonClickHandler();
+            addNewCategoryButtonClickHandler();
+        });
+
+        jQuery.fn.any = function (filter) {
+            for (let i = 0; i < this.length; i++) {
+                console.log(this[i]);
+                if (filter.call(this[i]))
+                    return true;
+            }
+            return false;
+        };
+    </script>
+{% endblock %}

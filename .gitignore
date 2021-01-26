@@ -18,6 +18,7 @@ tests/report/
 
 # Non-production files
 atmal_blog/secret_key.txt
+media/*
 
 # Databases
 *.sqlite3
