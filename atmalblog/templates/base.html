@@ -1,4 +1,6 @@
 {% load static %}
+{% load tags %}
+{% url 'index' as index %}
 {% url 'new_post' as new_post_url %}
 {% url 'logout' as logout_url %}
 
@@ -15,7 +17,7 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">ATMAL Blog{# <small>Simplifying the complex</small> #}</a>
+        <a class="navbar-brand" href="{{ index }}">ATMAL Blog{# <small>Simplifying the complex</small> #}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault"
                 aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -23,8 +25,8 @@
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <li class="nav-item active">
-                    <a class="nav-link" aria-current="page" href="#">Home</a>
+                <li class="nav-item {% active request index %}">
+                    <a class="nav-link" aria-current="page" href="{{ index }}">Home</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="cat-dropdown" data-bs-toggle="dropdown"
@@ -39,7 +41,7 @@
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Resources</a>
                 </li>
                 {% if user.is_staff %}
-                    <li class="nav-item">
+                    <li class="nav-item {% active request new_post_url %}">
                         <a class="nav-link" href="{{ new_post_url }}">New post</a>
                     </li>
                 {% endif %}
