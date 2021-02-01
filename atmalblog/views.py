@@ -9,15 +9,17 @@ from django.views.decorators.http import require_http_methods
 
 from atmal_blog.settings import MEDIA_ROOT
 from .forms import *
+from .translations import translatable
 
 
 def _get_initial_form_set_data():
     return [{'name': '', 'language': lang} for lang in Language.objects.all()]
 
 
+@translatable
 def index(request):
     context = {
-        'posts': PostTranslations.objects.order_by('-published_date'),
+        'posts': PostTranslations.objects.order_by('-published_date').filter(language=request.language)
     }
     return render(request, 'posts-list.html', context=context)
 
