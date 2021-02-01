@@ -37,7 +37,7 @@ def _get_language(request) -> Language:
     return Language.objects.get(code='en')  # Use the default language - English
 
 
-def _parse_accepted_languages(request) -> Dict[str, int]:
+def _parse_accepted_languages(request) -> Dict[str, float]:
     """
     Parses the ACCEPT-LANGUAGE list present in the request
     with optional weights and returns a dictionary
@@ -50,7 +50,14 @@ def _parse_accepted_languages(request) -> Dict[str, int]:
     matches = languages_regex.findall(request.META.get('HTTP_ACCEPT_LANGUAGE'))
     for match in matches:
         language = match[:2]  # Take the language code
-        weight = 1 if (w := match.partition('=')) else w  # If the weight is present - use it, otherwise set to 1
-        accepted_languages[language] = weight
+        if language in accepted_languages.keys():
+            # It may happen that there are two language codes present in accepted language
+            # For instance 'en' and 'en-GB'
+            # In which case, we can ignore the second (we are not going to have separate UK and US translations
+            continue
+
+        # In the accepted languages, we may find the weights.
+        # If present, it will be listed after the equals sign.
+        accepted_languages[language] = float(weight) if (weight := match.partition('=')[2]) else 1
 
     return accepted_languages
