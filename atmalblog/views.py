@@ -161,6 +161,7 @@ def new_category(request):
         return JsonResponse({'errors': form_set.errors}, status=400)
 
 
+@translatable
 def view_post(request, pk, slug):
     post = PostTranslations.objects.get(pk=pk)
     series = SeriesTranslations.objects.get(series=post.post.series, language=post.language)
