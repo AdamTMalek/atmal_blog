@@ -107,6 +107,11 @@ class PostTranslations(models.Model):
     def slug(self):
         return slugify(self.title)
 
+    @property
+    def translated_categories(self):
+        categories = list(self.post.categories.values_list('pk', flat=True))
+        return CategoryTranslation.objects.filter(category__in=categories, language=self.language)
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['post', 'language'], name='unique_post_translation')

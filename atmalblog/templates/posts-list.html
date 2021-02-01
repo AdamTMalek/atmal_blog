@@ -13,8 +13,8 @@
                 <p class="post-description">{{ post.short_description }}</p>
                 <div class="post-footer" style="display: block; width: 97%;">
                     <div class="tags">
-                        {% for category in post.post.categories.all %}
-                            <a class="badge" href="#">{{ category }}</a>
+                        {% for category in post.translated_categories.all %}
+                            <a class="badge" href="#">{{ category.name }}</a>
                         {% endfor %}
                     </div>
                     <p>Published on {{ post.published_date|date:"d E Y" }}</p>
